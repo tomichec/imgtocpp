@@ -7,7 +7,7 @@
 PIXELS128x296=$(echo 128*296| bc -l)
 # MEMSIZE128x296=4736
 
-all: bleskomat_128x296.h
+all: bleskomat_128x296.h bleskomat_200x200.h
 
 %.bmp: %.svg
 	# -depth 8 -type palette truecolor
@@ -19,7 +19,10 @@ all: bleskomat_128x296.h
 %_128x296.txt: %_128x296.bmp size_128x296.py binaryimage.py
 	echo 'filename="$<"' | cat $(word 2, $+) - $(word 3, $+) | python > $@
 
-%_128x296_trans.txt: %_128x296.txt transpose.py 
+%_200x200.txt: %_200x200.bmp size_200x200.py binaryimage.py
+	echo 'filename="$<"' | cat $(word 2, $+) - $(word 3, $+) | python > $@
+
+%_trans.txt: %.txt transpose.py 
 	echo 'filename="$<"' | \
 	cat - $(word 2, $+) | \
 	python | \
@@ -28,7 +31,7 @@ all: bleskomat_128x296.h
 	> $@
 
 %.h: head.hpart %_trans.txt tail.hpart
-	echo "const unsigned char $*[4736] PROGMEM = {" | \
+	echo "const unsigned char $*[] PROGMEM = {" | \
 	cat $< - $(word 2, $+) $(word 3, $+) \
 	> $@
 
