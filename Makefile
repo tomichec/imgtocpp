@@ -8,7 +8,6 @@ PYTHON=python3
 all: bleskomat_128x296.h bleskomat_200x200.h bleskomat_400x300.h
 
 %.bmp: %.svg
-	# -depth 8 -type palette truecolor
 	convert $< -depth 8 -type truecolor $@
 
 bleskomat_%.text: bleskomat_%.bmp size_%.py binaryimage.py
